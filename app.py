@@ -51,10 +51,20 @@ DESIGN_CSS = """
     --action-gradient: linear-gradient(rgb(0, 68, 185) 5.5%, rgb(0, 116, 236) 35%, rgb(78, 177, 255) 65%, rgb(173, 217, 255) 95%);
 }
 
-.gradio-container, body {
-    background: linear-gradient(rgb(189, 215, 255) 0%, rgb(255, 255, 255) 39.45%) fixed !important;
+.gradio-container, body, .gradio-container * {
     font-family: 'Instrument Sans', system-ui, sans-serif !important;
     color: var(--navy) !important;
+}
+.gradio-container, body {
+    background: linear-gradient(rgb(189, 215, 255) 0%, rgb(255, 255, 255) 39.45%) fixed !important;
+}
+.gradio-container p, .gradio-container span, .gradio-container li,
+.gradio-container td, .gradio-container th, .gradio-container .prose,
+.gradio-container .prose *, .markdown, .markdown * {
+    color: var(--navy) !important;
+}
+.gr-button.primary, button.primary, .gr-button.primary * {
+    color: #ffffff !important;
 }
 
 h1, h2, h3, h4, .prose h1, .prose h2, .prose h3 {
