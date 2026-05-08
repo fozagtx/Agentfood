@@ -89,7 +89,18 @@ def _coerce_history(history):
 def chat(message, history):
     history_messages = _coerce_history(history)
 
-    decision = _llm_first_pass(history_messages, message)
+    try:
+        decision = _llm_first_pass(history_messages, message)
+    except Exception as e:
+        yield (
+            f"⚠️ Couldn't reach the model.\n\n"
+            f"`VLLM_BASE_URL = {VLLM_BASE_URL}`\n\n"
+            f"Set `VLLM_BASE_URL` and `MODEL_NAME` in HF Space → Settings → Variables and secrets, "
+            f"pointing at a publicly reachable vLLM endpoint.\n\n"
+            f"_Error: {type(e).__name__}: {e}_"
+        )
+        return
+
     tool_call = _detect_tool_call(decision)
 
     if tool_call:
@@ -112,12 +123,13 @@ def chat(message, history):
         yield _events_to_markdown(latest_events, threshold)
         return
 
-    yield from _llm_stream(history_messages, message)
+    try:
+        yield from _llm_stream(history_messages, message)
+    except Exception as e:
+        yield f"⚠️ Streaming failed: {type(e).__name__}: {e}"
 
 
 DESIGN_CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap');
-
 :root {
     --navy: rgb(0, 34, 89);
     --brand-blue: rgb(38, 112, 220);
@@ -131,7 +143,7 @@ DESIGN_CSS = """
 }
 
 .gradio-container, body, .gradio-container * {
-    font-family: 'Instrument Sans', system-ui, sans-serif !important;
+    font-family: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
     color: var(--navy) !important;
 }
 .gradio-container, body {
@@ -247,10 +259,76 @@ button.example *,
 }
 .examples button:hover,
 [class*="examples"] button:hover { transform: translateY(-1px); }
+
+/* Kill the indigo "Chatbot" label badge */
+.chatbot .label-wrap,
+.chatbot .label,
+[data-testid="chatbot"] .label-wrap,
+[data-testid="chatbot"] .label,
+.chatbot > div > .svelte-* {
+    display: none !important;
+}
+.chatbot label, [data-testid="chatbot"] label {
+    background: transparent !important;
+    color: var(--steel-muted) !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+}
+
+/* Message input bar — was rendering dark */
+.gradio-container footer { display: none !important; }
+[data-testid="textbox"], .input-row, .input-container,
+.chat-input, .chat-input-container, footer.svelte-* {
+    background: var(--card-wash) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+    padding: 6px !important;
+    box-shadow: rgba(255,255,255,0.75) -2px -2px 4px inset, rgba(255,255,255,0.75) 2px 2px 4px inset !important;
+}
+.input-row textarea, .chat-input textarea,
+[data-testid="textbox"] textarea {
+    background: #fff !important;
+    color: var(--navy) !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+    box-shadow: var(--inset-glow) -2px -2px 4px inset, var(--inset-glow) 2px 2px 4px inset !important;
+}
+.input-row textarea::placeholder, .chat-input textarea::placeholder {
+    color: var(--steel-muted) !important;
+}
+
+/* Send button (paper plane) */
+button[aria-label="Submit"], button.send-button, .submit-button, button[title="Submit"] {
+    background: var(--action-gradient) !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    height: 40px !important;
+    width: 40px !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+}
+button[aria-label="Submit"] svg, button.send-button svg {
+    color: #fff !important;
+    stroke: #fff !important;
+}
+
+/* Layout: full width, comfortable padding */
+.gradio-container { max-width: 960px !important; margin: 0 auto !important; padding: 24px 16px !important; }
+.contain { max-width: 100% !important; }
+
+@media (max-width: 640px) {
+    h1 { font-size: 26px !important; }
+    .gradio-container { padding: 16px 12px !important; }
+}
 """
 
 
-with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS) as demo:
+FONTS_HEAD = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    '<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">'
+)
+
+with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS, head=FONTS_HEAD) as demo:
     gr.Markdown("# Agent Food")
     gr.ChatInterface(
         fn=chat,
