@@ -204,6 +204,49 @@ input[type="text"], textarea, .gr-textbox textarea, .gr-textbox input {
 table { background: #fff !important; border-radius: 12px !important; overflow: hidden; }
 th { background: var(--card-wash) !important; font-weight: 600 !important; }
 td { font-size: 14px !important; }
+
+.examples,
+.examples-holder,
+[class*="examples"] {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.examples button,
+.examples-holder button,
+[class*="examples"] button,
+.example,
+button.example,
+[data-testid="example"] {
+    background: var(--chip-active) !important;
+    color: var(--brand-blue) !important;
+    border: 1px solid var(--chip-active-border) !important;
+    border-radius: 9999px !important;
+    height: auto !important;
+    min-height: 34px !important;
+    padding: 8px 14px !important;
+    font-family: 'Instrument Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.5px !important;
+    box-shadow:
+        rgba(255,255,255,0.75) -2px -2px 4px inset,
+        rgba(255,255,255,0.75) 2px 2px 4px inset !important;
+    transition: transform 0.12s ease;
+}
+.examples button *,
+.examples-holder button *,
+[class*="examples"] button *,
+.example *,
+button.example *,
+[data-testid="example"] * {
+    color: var(--brand-blue) !important;
+    background: transparent !important;
+}
+.examples button:hover,
+[class*="examples"] button:hover { transform: translateY(-1px); }
 """
 
 
