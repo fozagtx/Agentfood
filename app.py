@@ -311,32 +311,52 @@ button[aria-label="Submit"] svg, button.send-button svg {
     stroke: #fff !important;
 }
 
-/* Layout: full page width, no cap */
+/* Layout: full page, full height — chatbot is the page */
+html, body { height: 100% !important; margin: 0 !important; }
 .gradio-container {
     max-width: 100% !important;
     width: 100% !important;
+    min-height: 100vh !important;
     margin: 0 !important;
-    padding: 24px 32px !important;
+    padding: 16px 24px 24px !important;
+    box-sizing: border-box !important;
 }
-.contain, .main, .wrap, .app, .fillable { max-width: 100% !important; width: 100% !important; }
-
-/* Chatbot fills page; tall enough that it doesn't shrink to mobile-card size */
-.chatbot, [data-testid="chatbot"] {
-    min-height: 70vh !important;
-    height: 70vh !important;
+.contain, .main, .wrap, .app, .fillable {
+    max-width: 100% !important;
     width: 100% !important;
 }
-.bubble-wrap, .message-wrap { min-height: calc(70vh - 60px) !important; }
 
-/* Input row also full width */
+/* The ChatInterface column should fill remaining viewport
+   so the input sits at the bottom and the chat fills the gap. */
+.gradio-container > .main,
+.gradio-container > div > .main,
+.app > .main,
+.fillable {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: calc(100vh - 80px) !important;
+}
+
+/* Chatbot grows to fill */
+.chatbot, [data-testid="chatbot"] {
+    flex: 1 1 auto !important;
+    min-height: calc(100vh - 220px) !important;
+    height: calc(100vh - 220px) !important;
+    width: 100% !important;
+}
+.bubble-wrap, .message-wrap { height: 100% !important; }
+
+/* Pin input row at the bottom, full width */
 .input-row, [data-testid="textbox"], .chat-input, .chat-input-container {
     width: 100% !important;
+    margin-top: auto !important;
 }
 
 @media (max-width: 640px) {
-    h1 { font-size: 26px !important; }
-    .gradio-container { padding: 16px 12px !important; }
-    .chatbot, [data-testid="chatbot"] { min-height: 60vh !important; height: 60vh !important; }
+    h1 { font-size: 24px !important; }
+    .gradio-container { padding: 12px 12px 16px !important; }
+    .chatbot, [data-testid="chatbot"] { min-height: calc(100vh - 200px) !important; height: calc(100vh - 200px) !important; }
 }
 
 /* Nuclear: any wrapper around the chat input that's still dark */
