@@ -313,12 +313,40 @@ button[aria-label="Submit"] svg, button.send-button svg {
 
 /* Layout: full width, comfortable padding */
 .gradio-container { max-width: 960px !important; margin: 0 auto !important; padding: 24px 16px !important; }
-.contain { max-width: 100% !important; }
+.contain, .main, .wrap { max-width: 100% !important; }
 
 @media (max-width: 640px) {
     h1 { font-size: 26px !important; }
     .gradio-container { padding: 16px 12px !important; }
 }
+
+/* Nuclear: any wrapper around the chat input that's still dark */
+.gradio-container [class*="input"]:not(textarea):not(input),
+.gradio-container [class*="Input"]:not(textarea):not(input),
+.gradio-container [class*="Container"],
+.gradio-container .panel {
+    background: var(--card-wash) !important;
+}
+.gradio-container [style*="background"] { background: inherit !important; }
+
+/* Send/submit button — round it, blue-gradient it */
+button.svelte-1ipelgc, button.send-btn, button[aria-label*="Send"], button[aria-label*="Submit"],
+.input-row button, [data-testid="textbox"] + button {
+    background: var(--action-gradient) !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    width: 44px !important;
+    height: 44px !important;
+}
+button.svelte-1ipelgc *, button.send-btn *, button[aria-label*="Send"] *, button[aria-label*="Submit"] * {
+    color: #fff !important;
+    fill: #fff !important;
+    stroke: #fff !important;
+}
+
+/* Hide any stray indigo pill labels */
+.label-wrap[style*="indigo"], .label-wrap[style*="rgb(99"] { display: none !important; }
 """
 
 
@@ -328,7 +356,48 @@ FONTS_HEAD = (
     '<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">'
 )
 
-with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS, head=FONTS_HEAD) as demo:
+
+THEME = gr.themes.Soft(
+    primary_hue=gr.themes.colors.blue,
+    secondary_hue=gr.themes.colors.blue,
+    neutral_hue=gr.themes.colors.slate,
+    font=[gr.themes.GoogleFont("Instrument Sans"), "ui-sans-serif", "system-ui", "sans-serif"],
+).set(
+    body_background_fill="linear-gradient(rgb(189,215,255) 0%, rgb(255,255,255) 39.45%)",
+    body_background_fill_dark="linear-gradient(rgb(189,215,255) 0%, rgb(255,255,255) 39.45%)",
+    body_text_color="rgb(0, 34, 89)",
+    body_text_color_dark="rgb(0, 34, 89)",
+    background_fill_primary="rgb(239, 244, 249)",
+    background_fill_primary_dark="rgb(239, 244, 249)",
+    background_fill_secondary="rgb(255, 255, 255)",
+    background_fill_secondary_dark="rgb(255, 255, 255)",
+    block_background_fill="rgb(239, 244, 249)",
+    block_background_fill_dark="rgb(239, 244, 249)",
+    block_label_background_fill="rgb(215, 231, 254)",
+    block_label_background_fill_dark="rgb(215, 231, 254)",
+    block_label_text_color="rgb(38, 112, 220)",
+    block_label_text_color_dark="rgb(38, 112, 220)",
+    input_background_fill="rgb(255, 255, 255)",
+    input_background_fill_dark="rgb(255, 255, 255)",
+    input_border_color="rgba(0, 37, 97, 0.06)",
+    input_border_color_dark="rgba(0, 37, 97, 0.06)",
+    button_primary_background_fill="linear-gradient(rgb(0,68,185) 5.5%, rgb(0,116,236) 35%, rgb(78,177,255) 65%, rgb(173,217,255) 95%)",
+    button_primary_background_fill_dark="linear-gradient(rgb(0,68,185) 5.5%, rgb(0,116,236) 35%, rgb(78,177,255) 65%, rgb(173,217,255) 95%)",
+    button_primary_text_color="#ffffff",
+    button_primary_text_color_dark="#ffffff",
+    button_secondary_background_fill="rgb(255, 255, 255)",
+    button_secondary_background_fill_dark="rgb(255, 255, 255)",
+    button_secondary_text_color="rgb(38, 112, 220)",
+    button_secondary_text_color_dark="rgb(38, 112, 220)",
+    border_color_primary="rgba(0, 37, 97, 0.06)",
+    border_color_primary_dark="rgba(0, 37, 97, 0.06)",
+    color_accent="rgb(38, 112, 220)",
+    color_accent_soft="rgb(215, 231, 254)",
+    color_accent_soft_dark="rgb(215, 231, 254)",
+)
+
+
+with gr.Blocks(title="Agent Food", theme=THEME, css=DESIGN_CSS, head=FONTS_HEAD) as demo:
     gr.Markdown("# Agent Food")
     gr.ChatInterface(
         fn=chat,
