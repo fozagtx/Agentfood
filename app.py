@@ -425,7 +425,6 @@ with gr.Blocks(title="Agent Food", theme=THEME, css=DESIGN_CSS, head=FONTS_HEAD)
             "Find me free food events in San Francisco this week",
             "What's happening in NYC tonight with free drinks?",
             "Any free food events in Austin?",
-            "Explain what AMD MI300X is.",
         ],
         cache_examples=False,
     )
