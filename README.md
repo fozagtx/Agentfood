@@ -18,6 +18,8 @@ tags:
 
 # Agent Free Food
 
+🔗 **Live demo:** https://huggingface.co/spaces/lablab-ai-amd-developer-hackathon/AgentFreeFood
+
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
 Powered by:
