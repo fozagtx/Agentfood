@@ -311,13 +311,32 @@ button[aria-label="Submit"] svg, button.send-button svg {
     stroke: #fff !important;
 }
 
-/* Layout: full width, comfortable padding */
-.gradio-container { max-width: 960px !important; margin: 0 auto !important; padding: 24px 16px !important; }
-.contain, .main, .wrap { max-width: 100% !important; }
+/* Layout: full page width, no cap */
+.gradio-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 24px 32px !important;
+}
+.contain, .main, .wrap, .app, .fillable { max-width: 100% !important; width: 100% !important; }
+
+/* Chatbot fills page; tall enough that it doesn't shrink to mobile-card size */
+.chatbot, [data-testid="chatbot"] {
+    min-height: 70vh !important;
+    height: 70vh !important;
+    width: 100% !important;
+}
+.bubble-wrap, .message-wrap { min-height: calc(70vh - 60px) !important; }
+
+/* Input row also full width */
+.input-row, [data-testid="textbox"], .chat-input, .chat-input-container {
+    width: 100% !important;
+}
 
 @media (max-width: 640px) {
     h1 { font-size: 26px !important; }
     .gradio-container { padding: 16px 12px !important; }
+    .chatbot, [data-testid="chatbot"] { min-height: 60vh !important; height: 60vh !important; }
 }
 
 /* Nuclear: any wrapper around the chat input that's still dark */
