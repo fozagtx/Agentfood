@@ -145,13 +145,35 @@ button[role="tab"][aria-selected="true"] {
         rgba(255,255,255,0.75) 2px 2px 4px inset !important;
 }
 
-.message, .message-bubble, .chatbot .message {
+.chatbot, .chatbot > div, [data-testid="chatbot"], .bubble-wrap, .message-wrap {
+    background: var(--card-wash) !important;
     border-radius: 12px !important;
-    background: #fff !important;
+    box-shadow:
+        rgba(255,255,255,0.75) -4px -4px 6px 0px inset,
+        rgba(255,255,255,0.75) 4px 4px 6px 0px inset !important;
+    color: var(--navy) !important;
+}
+
+.message, .message-bubble, .chatbot .message, .chatbot .user, .chatbot .bot,
+.chatbot [data-testid="user"], .chatbot [data-testid="bot"] {
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    color: var(--navy) !important;
     box-shadow:
         var(--inset-glow) -2px -2px 4px 0px inset,
         var(--inset-glow) 2px 2px 4px 0px inset !important;
-    color: var(--navy) !important;
+    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+}
+
+.chatbot .user, .chatbot [data-testid="user"] {
+    background: var(--chip-active) !important;
+    color: var(--brand-blue) !important;
+}
+
+.message *, .message-bubble *, .chatbot .message *,
+.chatbot .user *, .chatbot .bot *, .chatbot p, .chatbot span, .chatbot div {
+    color: inherit !important;
+    background: transparent !important;
 }
 
 .gradio-container input[type="range"] {
@@ -167,17 +189,15 @@ td { color: var(--navy) !important; font-size: 14px !important; }
 EVENT_COLUMNS = ["Score", "Event", "When / Where", "Food & Drinks", "Reasoning", "URL"]
 
 
-def run_free_food_agent(city, threshold, results_per_query, exa_api_key):
+def run_free_food_agent(city, threshold, results_per_query):
     threshold = int(threshold)
     results_per_query = int(results_per_query)
-    key = (exa_api_key or "").strip() or None
     city = (city or "San Francisco").strip()
 
     for status, events in stream_free_food_events(
         city=city,
         threshold=threshold,
         max_results_per_query=results_per_query,
-        exa_api_key=key,
     ):
         rows = events_to_rows(events)
         count_md = f"### Found **{len(events)}** event(s) at >= {threshold}%"
@@ -190,6 +210,7 @@ with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS) as de
     with gr.Tab("Chat"):
         gr.ChatInterface(
             fn=chat,
+            type="messages",
             description="Chat with an LLM running on AMD MI300X GPU via vLLM.",
             examples=["Explain what AMD MI300X is.", "Write a Python hello world."],
             cache_examples=False,
@@ -209,12 +230,6 @@ with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS) as de
             with gr.Column(scale=1):
                 per_query = gr.Slider(1, 15, value=8, step=1, label="Results per query")
 
-        exa_key = gr.Textbox(
-            label="Exa API key (optional — falls back to EXA_API_KEY env var)",
-            type="password",
-            placeholder="exa-...",
-        )
-
         with gr.Row():
             run_btn = gr.Button("Find free food events", variant="primary", scale=3)
             clear_btn = gr.Button("Clear", scale=1)
@@ -231,7 +246,7 @@ with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS) as de
 
         run_btn.click(
             run_free_food_agent,
-            [city, threshold, per_query, exa_key],
+            [city, threshold, per_query],
             [status, count_md, results],
         )
         clear_btn.click(lambda: ("", "", []), None, [status, count_md, results])
