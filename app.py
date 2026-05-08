@@ -341,8 +341,8 @@ html, body { height: 100% !important; margin: 0 !important; }
 /* Chatbot grows to fill */
 .chatbot, [data-testid="chatbot"] {
     flex: 1 1 auto !important;
-    min-height: calc(100vh - 220px) !important;
-    height: calc(100vh - 220px) !important;
+    min-height: calc(100vh - 140px) !important;
+    height: calc(100vh - 140px) !important;
     width: 100% !important;
 }
 .bubble-wrap, .message-wrap { height: 100% !important; }
@@ -356,7 +356,7 @@ html, body { height: 100% !important; margin: 0 !important; }
 @media (max-width: 640px) {
     h1 { font-size: 24px !important; }
     .gradio-container { padding: 12px 12px 16px !important; }
-    .chatbot, [data-testid="chatbot"] { min-height: calc(100vh - 200px) !important; height: calc(100vh - 200px) !important; }
+    .chatbot, [data-testid="chatbot"] { min-height: calc(100vh - 160px) !important; height: calc(100vh - 160px) !important; }
 }
 
 /* Nuclear: any wrapper around the chat input that's still dark */
