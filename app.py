@@ -437,7 +437,7 @@ THEME = gr.themes.Soft(
 
 
 with gr.Blocks(title="Agent Food", theme=THEME, css=DESIGN_CSS, head=FONTS_HEAD) as demo:
-    gr.Markdown("# Agent Food")
+    gr.Markdown("# Agent Free Food")
     gr.ChatInterface(
         fn=chat,
         type="messages",
