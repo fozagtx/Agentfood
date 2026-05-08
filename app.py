@@ -184,7 +184,7 @@ def run_free_food_agent(city, threshold, results_per_query, exa_api_key):
         yield status, count_md, rows
 
 
-with gr.Blocks(title="Agent Food") as demo:
+with gr.Blocks(title="Agent Food", theme=gr.themes.Soft(), css=DESIGN_CSS) as demo:
     gr.Markdown("# Agent Food")
 
     with gr.Tab("Chat"):
@@ -238,4 +238,4 @@ with gr.Blocks(title="Agent Food") as demo:
 
 
 if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft(), css=DESIGN_CSS)
+    demo.launch()
