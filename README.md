@@ -17,6 +17,7 @@ tags:
   - track:backyard
   - sponsor:openai
   - achievement:offbrand
+  - achievement:fieldnotes
 ---
 
 # Agent Free Food
@@ -38,8 +39,9 @@ Powered by:
 ## Build Small Submission
 
 - **Track:** Backyard AI (`track:backyard`)
+- **Tracks:** Build Small includes Backyard AI for practical apps and Thousand Token Wood for whimsical apps; Agent Free Food is submitted to the practical Backyard AI track.
 - **Sponsor prize:** Best Use of Codex (`sponsor:openai`)
-- **Achievement:** Custom UI (`achievement:offbrand`)
+- **Achievements:** Custom UI (`achievement:offbrand`), Field Notes (`achievement:fieldnotes`)
 - **Model:** `Qwen/Qwen2.5-7B-Instruct:fastest` via Hugging Face Inference Providers, under the 32B parameter limit
 - **Demo video:** https://youtu.be/MMg47HF4oVA
 - **Social post:** https://www.linkedin.com/posts/fawuzanibrahim_i-built-an-agent-that-finds-free-food-near-ugcPost-7472408995178414080-cNKX/
