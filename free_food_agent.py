@@ -7,7 +7,7 @@ from exa_py import Exa
 from openai import OpenAI
 
 
-DEFAULT_HF_MODEL = "Qwen/Qwen3-14B:fastest"
+DEFAULT_HF_MODEL = "Qwen/Qwen2.5-7B-Instruct:fastest"
 DEFAULT_HF_ROUTER_BASE_URL = "https://router.huggingface.co/v1"
 
 

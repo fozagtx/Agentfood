@@ -23,7 +23,7 @@ tags:
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
 Powered by:
-- **Hugging Face Inference Providers** running **Qwen/Qwen3-14B** through the OpenAI-compatible router
+- **Hugging Face Inference Providers** running **Qwen/Qwen2.5-7B-Instruct** through the OpenAI-compatible router
 - **Exa** neural web search
 - **Gradio** UI
 
@@ -42,7 +42,7 @@ Set these as Space secrets (Settings → Variables and secrets):
 | Name | Required | Value |
 |------|----------|-------|
 | `HF_TOKEN` | yes | Hugging Face token with **Make calls to Inference Providers** permission |
-| `HF_MODEL` | optional | Defaults to `Qwen/Qwen3-14B:fastest` |
+| `HF_MODEL` | optional | Defaults to `Qwen/Qwen2.5-7B-Instruct:fastest` |
 | `HF_ROUTER_BASE_URL` | optional | Defaults to `https://router.huggingface.co/v1` |
 | `EXA_API_KEY` | yes | Get one at https://exa.ai |
 
@@ -56,7 +56,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 export HF_TOKEN="hf_..."
-export HF_MODEL="Qwen/Qwen3-14B:fastest"
+export HF_MODEL="Qwen/Qwen2.5-7B-Instruct:fastest"
 export EXA_API_KEY="exa-..."
 
 python app.py
