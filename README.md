@@ -7,6 +7,7 @@ sdk: gradio
 sdk_version: 5.29.0
 app_file: app.py
 pinned: false
+short_description: find free food anywhere around the world
 tags:
   - huggingface
   - inference-providers
@@ -17,7 +18,7 @@ tags:
 
 # Agent Free Food
 
-🔗 **Live demo:** https://huggingface.co/spaces/lablab-ai-amd-developer-hackathon/AgentFreeFood
+🔗 **Live demo:** https://huggingface.co/spaces/build-small-hackathon/Agentfreefood
 
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
@@ -30,7 +31,7 @@ Powered by:
 
 1. User asks something in chat ("free food in Austin tonight").
 2. The LLM decides whether to call its single tool: `search_free_food(city, threshold)`.
-3. If yes, the app runs Exa search across multiple curated queries, fetches page contents, and asks the LLM to score each event 0–100 on free-food likelihood.
+3. If yes, the app runs Exa search across multiple curated queries, fetches page contents, and asks the LLM to score each event 0-100 on free-food likelihood.
 4. Events at or above the threshold are streamed back into the chat as a markdown table sorted by score.
 5. If no tool is needed, the LLM just chats normally.
 
@@ -67,7 +68,7 @@ Open http://127.0.0.1:7860.
 
 - `app.py` — Gradio UI, tool-routing chat, custom design system
 - `free_food_agent.py` — Exa search + LLM scoring pipeline
-- `requirements.txt` — `gradio>=5.0.0`, `openai>1.0.0`, `exa-py`
+- `requirements.txt` — `gradio==5.29.0`, `openai>1.0.0`, `exa-py`
 
 ## Try it
 
