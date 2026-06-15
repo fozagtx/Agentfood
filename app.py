@@ -4,15 +4,16 @@ import re
 import gradio as gr
 from openai import OpenAI
 
-from free_food_agent import stream_free_food_events
+from free_food_agent import DEFAULT_HF_MODEL, DEFAULT_HF_ROUTER_BASE_URL, stream_free_food_events
 
-VLLM_BASE_URL = os.environ.get("VLLM_BASE_URL", "http://localhost:8000/v1")
-MODEL_NAME = os.environ.get("MODEL_NAME", "meta-llama/Llama-3.1-8B-Instruct")
+HF_ROUTER_BASE_URL = os.environ.get("HF_ROUTER_BASE_URL", DEFAULT_HF_ROUTER_BASE_URL)
+MODEL_NAME = os.environ.get("HF_MODEL") or os.environ.get("MODEL_NAME", DEFAULT_HF_MODEL)
+HF_TOKEN = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACEHUB_API_TOKEN") or "hf-token-missing"
 
-client = OpenAI(base_url=VLLM_BASE_URL, api_key="not-required")
+client = OpenAI(base_url=HF_ROUTER_BASE_URL, api_key=HF_TOKEN)
 
 
-SYSTEM_PROMPT = """You are Agent Food, an assistant running on AMD MI300X GPU via vLLM.
+SYSTEM_PROMPT = """You are Agent Food, an assistant using a hosted Hugging Face Inference Providers model.
 
 You have ONE tool: search_free_food(city, threshold).
 Use it when the user asks about events, free food, free drinks, what's happening, things to do tonight/this week, parties, mixers, hackathons, meetups, or anything event-related in a city.
@@ -57,12 +58,16 @@ def _events_to_markdown(events, threshold):
 
 
 def _llm_first_pass(history_messages, user_message):
+    if HF_TOKEN == "hf-token-missing":
+        raise RuntimeError("HF_TOKEN is not set. Add a Hugging Face token with Inference Providers access.")
     messages = [{"role": "system", "content": SYSTEM_PROMPT}, *history_messages, {"role": "user", "content": user_message}]
-    resp = client.chat.completions.create(model=MODEL_NAME, messages=messages, temperature=0.2)
+    resp = client.chat.completions.create(model=MODEL_NAME, messages=messages, temperature=0.2, max_tokens=256)
     return resp.choices[0].message.content or ""
 
 
 def _llm_stream(history_messages, user_message, system_override=None):
+    if HF_TOKEN == "hf-token-missing":
+        raise RuntimeError("HF_TOKEN is not set. Add a Hugging Face token with Inference Providers access.")
     sys_prompt = system_override or SYSTEM_PROMPT
     messages = [{"role": "system", "content": sys_prompt}, *history_messages, {"role": "user", "content": user_message}]
     stream = client.chat.completions.create(model=MODEL_NAME, messages=messages, stream=True)
@@ -94,9 +99,10 @@ def chat(message, history):
     except Exception as e:
         yield (
             f"⚠️ Couldn't reach the model.\n\n"
-            f"`VLLM_BASE_URL = {VLLM_BASE_URL}`\n\n"
-            f"Set `VLLM_BASE_URL` and `MODEL_NAME` in HF Space → Settings → Variables and secrets, "
-            f"pointing at a publicly reachable vLLM endpoint.\n\n"
+            f"`HF_ROUTER_BASE_URL = {HF_ROUTER_BASE_URL}`\n\n"
+            f"`HF_MODEL = {MODEL_NAME}`\n\n"
+            f"Set `HF_TOKEN`, `HF_MODEL`, and `EXA_API_KEY` in HF Space → Settings → Variables and secrets. "
+            f"The token must allow Hugging Face Inference Providers calls.\n\n"
             f"_Error: {type(e).__name__}: {e}_"
         )
         return

@@ -7,6 +7,10 @@ from exa_py import Exa
 from openai import OpenAI
 
 
+DEFAULT_HF_MODEL = "Qwen/Qwen3-14B:fastest"
+DEFAULT_HF_ROUTER_BASE_URL = "https://router.huggingface.co/v1"
+
+
 DETAIL_PROMPT = """Analyze this event page and estimate the likelihood (0-100) that attendees get free food or drinks.
 
 90-100 -> explicitly offers free food/drinks to attendees
@@ -31,12 +35,15 @@ def _build_queries(city: str) -> list[str]:
 
 
 def _llm_client() -> OpenAI:
-    base_url = os.environ.get("VLLM_BASE_URL", "http://localhost:8000/v1")
-    return OpenAI(base_url=base_url, api_key=os.environ.get("VLLM_API_KEY", "not-required"))
+    base_url = os.environ.get("HF_ROUTER_BASE_URL", DEFAULT_HF_ROUTER_BASE_URL)
+    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACEHUB_API_TOKEN")
+    if not token:
+        raise RuntimeError("HF_TOKEN is not set. Add a Hugging Face token with Inference Providers access.")
+    return OpenAI(base_url=base_url, api_key=token)
 
 
 def _model_name() -> str:
-    return os.environ.get("MODEL_NAME", "meta-llama/Llama-3.1-8B-Instruct")
+    return os.environ.get("HF_MODEL") or os.environ.get("MODEL_NAME", DEFAULT_HF_MODEL)
 
 
 def _extract_json(text: str) -> dict[str, Any] | None:
@@ -69,6 +76,7 @@ def _score_event(client: OpenAI, model: str, title: str, url: str, content: str)
             {"role": "user", "content": user_msg},
         ],
         temperature=0.2,
+        max_tokens=512,
     )
     parsed = _extract_json(resp.choices[0].message.content or "")
     if not parsed:

@@ -8,9 +8,8 @@ sdk_version: 5.29.0
 app_file: app.py
 pinned: false
 tags:
-  - amd
-  - amd-hackathon-2026
-  - vllm
+  - huggingface
+  - inference-providers
   - gradio
   - agent
   - exa
@@ -23,7 +22,7 @@ tags:
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
 Powered by:
-- **AMD MI300X GPU** running **Qwen2.5-14B-Instruct** via **vLLM** (OpenAI-compatible)
+- **Hugging Face Inference Providers** running **Qwen/Qwen3-14B** through the OpenAI-compatible router
 - **Exa** neural web search
 - **Gradio** UI
 
@@ -41,10 +40,12 @@ Set these as Space secrets (Settings → Variables and secrets):
 
 | Name | Required | Value |
 |------|----------|-------|
-| `VLLM_BASE_URL` | yes | Public vLLM endpoint, e.g. `http://YOUR_IP:8000/v1` |
-| `MODEL_NAME` | yes | e.g. `Qwen/Qwen2.5-14B-Instruct` |
+| `HF_TOKEN` | yes | Hugging Face token with **Make calls to Inference Providers** permission |
+| `HF_MODEL` | optional | Defaults to `Qwen/Qwen3-14B:fastest` |
+| `HF_ROUTER_BASE_URL` | optional | Defaults to `https://router.huggingface.co/v1` |
 | `EXA_API_KEY` | yes | Get one at https://exa.ai |
-| `VLLM_API_KEY` | optional | Only if your vLLM was started with `--api-key` |
+
+`MODEL_NAME` is still accepted as a fallback for older deployments, but new setups should use `HF_MODEL`.
 
 ## Run locally
 
@@ -53,8 +54,8 @@ python3.11 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-export VLLM_BASE_URL="http://localhost:8000/v1"   # via SSH tunnel or local vLLM
-export MODEL_NAME="Qwen/Qwen2.5-14B-Instruct"
+export HF_TOKEN="hf_..."
+export HF_MODEL="Qwen/Qwen3-14B:fastest"
 export EXA_API_KEY="exa-..."
 
 python app.py
