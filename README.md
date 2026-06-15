@@ -14,6 +14,11 @@ tags:
   - gradio
   - agent
   - exa
+  - web-search
+  - food
+  - events
+  - qwen
+  - codex
   - track:backyard
   - sponsor:openai
   - achievement:offbrand
@@ -26,6 +31,7 @@ tags:
 📦 **Source:** https://github.com/fozagtx/Agentfood
 🎥 **Demo video:** https://youtu.be/MMg47HF4oVA
 📣 **Social post:** https://www.linkedin.com/posts/fawuzanibrahim_i-built-an-agent-that-finds-free-food-near-ugcPost-7472408995178414080-cNKX/
+📝 **Field Notes blog:** https://dev.to/ibrahimpima/i-built-an-agent-that-finds-free-food-near-you-3npb
 
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
@@ -45,6 +51,7 @@ Powered by:
 - **Model:** `Qwen/Qwen2.5-7B-Instruct:fastest` via Hugging Face Inference Providers, under the 32B parameter limit
 - **Demo video:** https://youtu.be/MMg47HF4oVA
 - **Social post:** https://www.linkedin.com/posts/fawuzanibrahim_i-built-an-agent-that-finds-free-food-near-ugcPost-7472408995178414080-cNKX/
+- **Field Notes blog:** https://dev.to/ibrahimpima/i-built-an-agent-that-finds-free-food-near-you-3npb
 - **Team HF username:** `pima5`
 
 ## How it works
