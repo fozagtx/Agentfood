@@ -23,6 +23,8 @@ tags:
 
 An agentic chat that finds events with **free food and free drinks** in any city. Type a question — the agent decides whether to chat or to run a live web search, scores each event with an LLM, and returns the best ones.
 
+The agent instructions were prompt-tuned with **Codex** to surface the strongest free-food opportunities instead of generic event listings.
+
 Powered by:
 - **Hugging Face Inference Providers** running **Qwen/Qwen2.5-7B-Instruct** through the OpenAI-compatible router
 - **Exa** neural web search

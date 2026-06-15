@@ -195,7 +195,7 @@ label, .gr-box label {
 
 input[type="text"], textarea, .gr-textbox textarea, .gr-textbox input {
     background: #fff !important;
-    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+    border: 3px double rgba(38, 112, 220, 0.46) !important;
     border-radius: 12px !important;
     color: var(--navy) !important;
     box-shadow: var(--inset-glow) -2px -2px 4px 0px inset, var(--inset-glow) 2px 2px 4px 0px inset !important;
@@ -287,7 +287,7 @@ button.example *,
 .chat-input, .chat-input-container, footer.svelte-* {
     background: var(--card-wash) !important;
     border-radius: 16px !important;
-    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+    border: 3px double rgba(38, 112, 220, 0.36) !important;
     padding: 6px !important;
     box-shadow: rgba(255,255,255,0.75) -2px -2px 4px inset, rgba(255,255,255,0.75) 2px 2px 4px inset !important;
 }
@@ -296,7 +296,7 @@ button.example *,
     background: #fff !important;
     color: var(--navy) !important;
     border-radius: 12px !important;
-    border: 1px solid rgba(0, 37, 97, 0.06) !important;
+    border: 3px double rgba(38, 112, 220, 0.46) !important;
     box-shadow: var(--inset-glow) -2px -2px 4px inset, var(--inset-glow) 2px 2px 4px inset !important;
 }
 .input-row textarea::placeholder, .chat-input textarea::placeholder {
@@ -344,6 +344,15 @@ html, body { height: 100% !important; margin: 0 !important; }
     min-height: calc(100vh - 80px) !important;
 }
 
+/* Give the results panel the unused vertical space instead of leaving a large
+   blank area under the input. */
+#results-chatbot {
+    flex: 1 1 auto !important;
+    min-height: min(620px, calc(100vh - 220px)) !important;
+    height: calc(100vh - 220px) !important;
+    max-height: none !important;
+}
+
 /* Chatbot grows to fill */
 .chatbot, [data-testid="chatbot"] {
     flex: 1 1 auto !important;
@@ -362,7 +371,7 @@ html, body { height: 100% !important; margin: 0 !important; }
 @media (max-width: 640px) {
     h1 { font-size: 24px !important; }
     .gradio-container { padding: 12px 12px 16px !important; }
-    .chatbot, [data-testid="chatbot"] { min-height: calc(100vh - 160px) !important; height: calc(100vh - 160px) !important; }
+    .chatbot, [data-testid="chatbot"], #results-chatbot { min-height: calc(100vh - 184px) !important; height: calc(100vh - 184px) !important; }
 }
 
 /* Nuclear: any wrapper around the chat input that's still dark */
@@ -447,6 +456,12 @@ with gr.Blocks(title="Agent Food", theme=THEME, css=DESIGN_CSS, head=FONTS_HEAD)
     gr.ChatInterface(
         fn=chat,
         type="messages",
+        chatbot=gr.Chatbot(
+            type="messages",
+            height="calc(100vh - 220px)",
+            min_height="min(620px, calc(100vh - 220px))",
+            elem_id="results-chatbot",
+        ),
         examples=[
             "Find me free food events in San Francisco this week",
             "What's happening in NYC tonight with free drinks?",
