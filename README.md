@@ -20,6 +20,7 @@ tags:
   - qwen
   - codex
   - track:backyard
+  - track:wood
   - sponsor:openai
   - achievement:offbrand
   - achievement:fieldnotes
@@ -44,8 +45,7 @@ Powered by:
 
 ## Build Small Submission
 
-- **Track:** Backyard AI (`track:backyard`)
-- **Tracks:** Build Small includes Backyard AI for practical apps and Thousand Token Wood for whimsical apps; Agent Free Food is submitted to the practical Backyard AI track.
+- **Tracks:** Backyard AI (`track:backyard`) and Thousand Token Wood (`track:wood`)
 - **Sponsor prize:** Best Use of Codex (`sponsor:openai`)
 - **Achievements:** Custom UI (`achievement:offbrand`), Field Notes (`achievement:fieldnotes`)
 - **Model:** `Qwen/Qwen2.5-7B-Instruct:fastest` via Hugging Face Inference Providers, under the 32B parameter limit
